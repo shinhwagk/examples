@@ -7,7 +7,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: elasticsearch
-  namespace:  elastic-stack
+  namespace: elastic-stack
 spec:
   clusterIP: None
   selector:
@@ -25,9 +25,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 9200 # 这个servie的端口
-      targetPort: 9200 # 映射到容器的端口
-      nodePort: 30124 # 对外暴露的端口
+    - port: 9200
+      targetPort: 9200
+      nodePort: 30124
   selector:
     app: elasticsearch
 ---
@@ -111,18 +111,18 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   local:
     path: /opt/es-cluster-data-0
   nodeAffinity:
     required:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - cp1.k8s.lanhai.com
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - cp1.k8s.lanhai.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -132,15 +132,15 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   local:
     path: /opt/es-cluster-data-1
   nodeAffinity:
     required:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - cp1.k8s.lanhai.com
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - cp1.k8s.lanhai.com
