@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: proxy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy
+  namespace: proxy
+spec:
+  selector:
+    matchLabels:
+      app: proxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: proxy
+    spec:
+      containers:
+        - name: ss-proxy
+          image: shadowsocks/shadowsocks-libev
+          ports:
+            - containerPort: 8118
+              protocol: TCP
+          args:
+            - ss-local
+            - -s
+            - ""
+            - -p
+            - ""
+            - -k
+            - ""
+            - -l
+            - ""
+            - -m
+            - "aes-256-cfb"
+            - -b
+            - "0.0.0.0"
+        - name: http-proxy
+          image: shinhwagk/privoxy:latest
+          ports:
+            - containerPort: 1080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy
+  namespace: proxy
+spec:
+  ports:
+    - name: http-proxy
+      nodePort: 31081
+      port: 8118
+      protocol: TCP
+      targetPort: 8118
+    - name: ss-proxy
+      nodePort: 31080
+      port: 1080
+      protocol: TCP
+      targetPort: 1080
+  selector:
+    app: proxy
+  type: NodePort
