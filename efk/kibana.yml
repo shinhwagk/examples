@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: elastic-stack
+spec:
+  selector:
+    elastic-app: kibana
+  ports:
+    - name: api
+      port: 5601
+      targetPort: 5601
+      protocol: TCP
+      nodePort: 31019
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: elastic-stack
+spec:
+  selector:
+    matchLabels:
+      elastic-app: kibana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        elastic-app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:7.4.0
+          ports:
+            - containerPort: 5601
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: "http://elasticsearch-public:9200"
+

@@ -1,0 +1,169 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2019-10-10T06:08:18Z"
+  generateName: filebeat-
+  labels:
+    controller-revision-hash: 79db74f777
+    k8s-app: filebeat
+    pod-template-generation: "1"
+  name: filebeat-474hs
+  namespace: kube-system
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: DaemonSet
+    name: filebeat
+    uid: 275c4184-bc81-4376-94c9-0474585c1efd
+  resourceVersion: "5627406"
+  selfLink: /api/v1/namespaces/kube-system/pods/filebeat-474hs
+  uid: 25f88047-923d-4884-b22b-787325239240
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchFields:
+          - key: metadata.name
+            operator: In
+            values:
+            - worker02.k8s.lanhai.com
+  containers:
+  - args:
+    - -c
+    - /etc/filebeat.yml
+    - -e
+    env:
+    - name: ELASTICSEARCH_HOST
+      value: 10.110.234.222
+    - name: ELASTICSEARCH_PORT
+      value: "9200"
+    - name: ELASTICSEARCH_USERNAME
+      value: elastic
+    - name: ELASTICSEARCH_PASSWORD
+      value: cpm5b2799t482wxcgllxz279
+    - name: ELASTIC_CLOUD_ID
+    - name: ELASTIC_CLOUD_AUTH
+    - name: NODE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    image: docker.elastic.co/beats/filebeat:7.4.0
+    imagePullPolicy: IfNotPresent
+    name: filebeat
+    resources:
+      limits:
+        memory: 200Mi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    securityContext:
+      runAsUser: 0
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /etc/filebeat.yml
+      name: config
+      readOnly: true
+      subPath: filebeat.yml
+    - mountPath: /usr/share/filebeat/data
+      name: data
+    - mountPath: /var/lib/docker/containers
+      name: varlibdockercontainers
+      readOnly: true
+    - mountPath: /var/log
+      name: varlog
+      readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: filebeat-token-g6qvp
+      readOnly: true
+  dnsPolicy: ClusterFirstWithHostNet
+  enableServiceLinks: true
+  hostNetwork: true
+  nodeName: worker02.k8s.lanhai.com
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: filebeat
+  serviceAccountName: filebeat
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/disk-pressure
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/memory-pressure
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/pid-pressure
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/unschedulable
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/network-unavailable
+    operator: Exists
+  volumes:
+  - configMap:
+      defaultMode: 384
+      name: filebeat-config
+    name: config
+  - hostPath:
+      path: /var/lib/docker/containers
+      type: ""
+    name: varlibdockercontainers
+  - hostPath:
+      path: /var/log
+      type: ""
+    name: varlog
+  - hostPath:
+      path: /var/lib/filebeat-data
+      type: DirectoryOrCreate
+    name: data
+  - name: filebeat-token-g6qvp
+    secret:
+      defaultMode: 420
+      secretName: filebeat-token-g6qvp
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2019-10-11T06:09:34Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2019-10-11T06:09:35Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2019-10-11T06:09:35Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2019-10-10T06:08:18Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://2c8e2a97c739c03b95180531af483707c9cf10ea99c5bc6e09b50fe680905a3e
+    image: docker.elastic.co/beats/filebeat:7.4.0
+    imageID: docker-pullable://docker.elastic.co/beats/filebeat@sha256:6810b347ce494b881221098916f6a1ed316c444208889d461148e63501e35d05
+    lastState: {}
+    name: filebeat
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-10-11T06:09:34Z"
+  hostIP: 192.168.111.203
+  phase: Running
+  podIP: 192.168.111.203
+  qosClass: Burstable
+  startTime: "2019-10-11T06:09:34Z"
