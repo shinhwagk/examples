@@ -22,7 +22,7 @@ spec:
         - name: ss-proxy
           image: shadowsocks/shadowsocks-libev
           ports:
-            - containerPort: 8118
+            - containerPort: 1080
               protocol: TCP
           args:
             - ss-local
@@ -41,7 +41,7 @@ spec:
         - name: http-proxy
           image: shinhwagk/privoxy:latest
           ports:
-            - containerPort: 1080
+            - containerPort: 8118
               protocol: TCP
 ---
 apiVersion: v1
